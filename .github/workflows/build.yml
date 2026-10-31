@@ -3,6 +3,8 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: macos-latest
@@ -12,13 +14,33 @@ jobs:
         run: brew install xcodegen
       - name: Generate Xcode project
         run: xcodegen generate
-      - name: Build iOS Simulator (unsigned)
+      - name: Build for physical iPhone (unsigned)
+        shell: bash
         run: |
           set -o pipefail
-          xcodebuild -project BachAI.xcodeproj -scheme BachAI -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build 2>&1 | tee build.log
+          xcodebuild -project BachAI.xcodeproj -scheme BachAI -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath "$RUNNER_TEMP/BachAIDerived" CODE_SIGNING_ALLOWED=NO build 2>&1 | tee build.log
+      - name: Package unsigned IPA
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP="$RUNNER_TEMP/BachAIDerived/Build/Products/Release-iphoneos/BachAI.app"
+          test -d "$APP"
+          mkdir -p "$RUNNER_TEMP/ipa/Payload"
+          cp -R "$APP" "$RUNNER_TEMP/ipa/Payload/"
+          cd "$RUNNER_TEMP/ipa"
+          /usr/bin/zip -qry "$GITHUB_WORKSPACE/BachAI-unsigned.ipa" Payload
+          ls -lh "$GITHUB_WORKSPACE/BachAI-unsigned.ipa"
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: BachAI-unsigned-IPA
+          path: BachAI-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 7
       - name: Upload build log
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: bachai-build-log
           path: build.log
+          retention-days: 7
