@@ -12,3 +12,6 @@ Create a key in Google AI Studio and enter it in the app's Settings screen. The 
 
 ## Scope
 Current: chat, push-to-talk Vietnamese transcription, spoken replies. Next: App Intents/Siri, reminders/calendar, signing and device distribution.
+
+## Device IPA
+The main-branch workflow packages an unsigned iOS device IPA for signing locally with ZSign. Never upload certificates or private keys to this repository.
