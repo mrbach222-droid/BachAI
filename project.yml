@@ -1,0 +1,21 @@
+name: BachAI
+options:
+  bundleIdPrefix: com.bachai
+settings:
+  base:
+    SWIFT_VERSION: 5.9
+    IPHONEOS_DEPLOYMENT_TARGET: '17.0'
+targets:
+  BachAI:
+    type: application
+    platform: iOS
+    sources: [Sources]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bachai.voice
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: 'Bách AI cần micro để nghe câu hỏi.'
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: 'Bách AI cần nhận dạng giọng nói tiếng Việt.'
+        INFOPLIST_KEY_CFBundleDisplayName: 'Bách AI'
+        TARGETED_DEVICE_FAMILY: '1'
+        CODE_SIGNING_ALLOWED: NO
