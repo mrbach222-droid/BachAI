@@ -7,7 +7,7 @@ targets:
   BachCuteCalendar:
     type: application
     platform: iOS
-    sources: [CuteCalendar/App]
+    sources: [App]
     settings:
       base:
         SWIFT_VERSION: '5.9'
@@ -20,7 +20,7 @@ targets:
   BachCuteWidget:
     type: app-extension
     platform: iOS
-    sources: [CuteCalendar/Widget]
+    sources: [Widget]
     settings:
       base:
         SWIFT_VERSION: '5.9'
